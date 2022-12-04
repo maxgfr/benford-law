@@ -37,7 +37,7 @@ export const processBenfordLaw = (
   isFollowingBenfordLaw: boolean;
   firstDigitCounts: Record<string, number>;
   firstDigitProbabilities: Record<string, number>;
-  firstDigitAccuracy: Record<string, number>;
+  firstDigitAccuracies: Record<string, number>;
 } => {
   const firstDigits = numbers.map(getFirstDigit);
   const firstDigitCounts: Record<string, number> = firstDigits.reduce(
@@ -57,7 +57,7 @@ export const processBenfordLaw = (
     {},
   );
 
-  const firstDigitAccuracy: Record<string, number> = Object.entries(
+  const firstDigitAccuracies: Record<string, number> = Object.entries(
     firstDigitProbabilities,
   ).reduce((acc, [digit, probability]) => {
     const benfordProbability = benfordProbabilities[digit];
@@ -82,6 +82,6 @@ export const processBenfordLaw = (
     isFollowingBenfordLaw: isBenford,
     firstDigitProbabilities,
     firstDigitCounts,
-    firstDigitAccuracy,
+    firstDigitAccuracies,
   };
 };

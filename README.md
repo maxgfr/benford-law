@@ -51,7 +51,7 @@ console.log(processBenfordLaw(generateBenfordLawNumbers(50000), 0.01));
 //     '8': 2562,
 //     '9': 2315
 //   },
-//   firstDigitAccuracy: {
+//   firstDigitAccuracies: {
 //     '1': 0.0019199999999999773,
 //     '2': 0.0009399999999999964,
 //     '3': 0.0005000000000000004,
