@@ -1,6 +1,6 @@
 {
   "name": "benford-law",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "maxgfr",
   "license": "MIT",
   "description": "A simple library to check if a dataset follows the Benford's law",
