@@ -19,14 +19,18 @@ import {
   generateBenfordLawNumber,
 } from 'benford-law';
 
-// to generate a random number that follows Benford's law
-console.log(generateBenfordLawNumber());
+// Generate a single random number that follows Benford's law (between 1 and 1000)
+const randomNumber = generateBenfordLawNumber();
+console.log(randomNumber);
 
-// to generate an array of 10 random numbers that follow Benford's law
-console.log(generateBenfordLawNumbers(10));
+// Generate an array of 10 random numbers that follow Benford's law
+const randomNumbers = generateBenfordLawNumbers(10);
+console.log(randomNumbers);
 
-// to process an array of numbers and get the distribution
-console.log(processBenfordLaw(generateBenfordLawNumbers(50000), 0.01));
+// Analyze an array of numbers to check if it follows Benford's law
+// The second parameter (0.01) is the threshold for acceptable deviation
+const result = processBenfordLaw(generateBenfordLawNumbers(50000), 0.01);
+console.log(result);
 // {
 //   isFollowingBenfordLaw: true,
 //   firstDigitProbabilities: {
@@ -64,3 +68,64 @@ console.log(processBenfordLaw(generateBenfordLawNumbers(50000), 0.01));
 //   }
 // }
 ```
+
+## Error Handling
+
+The library includes comprehensive input validation:
+
+```ts
+// ❌ These will throw errors:
+generateBenfordLawNumbers(-5);     // Error: Length must be a positive integer
+generateBenfordLawNumbers(0);      // Error: Length must be a positive integer
+generateBenfordLawNumbers(5.5);    // Error: Length must be a positive integer
+
+processBenfordLaw([]);             // Error: Numbers array must be non-empty
+processBenfordLaw([-1, 2, 3]);     // Error: Number must be positive and non-zero
+processBenfordLaw([0, 1, 2]);      // Error: Number must be positive and non-zero
+processBenfordLaw([NaN, 1, 2]);    // Error: Number must be finite
+processBenfordLaw([1, 2], -0.1);   // Error: Threshold must be between 0 and 1
+processBenfordLaw([1, 2], 1);      // Error: Threshold must be between 0 and 1
+
+// ✅ These are valid:
+processBenfordLaw([1, 2, 3]);              // OK: positive integers
+processBenfordLaw([1.5, 2.7, 3.9]);        // OK: positive decimals
+processBenfordLaw([0.5, 0.7, 0.9]);        // OK: decimals < 1 (uses first significant digit)
+processBenfordLaw([123456, 234567]);       // OK: large numbers
+processBenfordLaw([1, 2, 3], 0.05);        // OK: custom threshold (5%)
+```
+
+## API
+
+### `generateBenfordLawNumber(): number`
+
+Generates a single random number that follows Benford's Law using logarithmic distribution.
+
+**Returns:** A number between 1 and 1000 following Benford's Law
+
+### `generateBenfordLawNumbers(length: number): number[]`
+
+Generates an array of random numbers that follow Benford's Law.
+
+**Parameters:**
+- `length` - The number of random numbers to generate (must be a positive integer)
+
+**Returns:** An array of numbers following Benford's Law
+
+**Throws:** Error if length is not a positive integer
+
+### `processBenfordLaw(numbers: number[], threshold?: number, benfordProbabilities?: Record<string, number>)`
+
+Analyzes a dataset to determine if it follows Benford's Law.
+
+**Parameters:**
+- `numbers` - Array of positive numbers to analyze
+- `threshold` - Maximum acceptable deviation from Benford's probabilities (default: 0.01 = 1%)
+- `benfordProbabilities` - Expected probabilities for each first digit (default: standard Benford distribution)
+
+**Returns:**
+- `isFollowingBenfordLaw` - Boolean indicating if the dataset follows Benford's Law
+- `firstDigitCounts` - Count of occurrences for each first digit (1-9)
+- `firstDigitProbabilities` - Calculated probability for each first digit
+- `firstDigitAccuracies` - Absolute deviation from expected Benford probabilities
+
+**Throws:** Error if the array is empty, contains invalid numbers, or threshold is invalid
